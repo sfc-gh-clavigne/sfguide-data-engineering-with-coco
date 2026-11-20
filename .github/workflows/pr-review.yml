@@ -42,7 +42,9 @@ jobs:
       - name: Run dbt-review agent
         run: |
           cortex --print "Use the dbt-review agent to review the changes in this PR" \
-            > review.md 2>/dev/null || true
+            > review.md 2> cortex-stderr.log || echo "cortex exited with $?"
+          echo "----- review.md -----"; cat review.md
+          echo "----- stderr -----"; cat cortex-stderr.log
 
       - name: Post review comment
         if: github.event_name == 'pull_request'
